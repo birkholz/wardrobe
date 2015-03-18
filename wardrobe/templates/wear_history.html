@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+
+{% block page_name %}Wear History{% endblock %}
+
+{% block extra_css %}
+	<style>
+	.outfit-image {
+		display: inline-block;
+		padding: 4px;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		margin: 0;
+		margin-top: -3px;
+	}
+	.content .img-thumbnail {
+		max-width: 50px;
+		max-height: 50px;
+	}
+	.content {
+		font-size: 0.86em;
+	}
+	@media (min-width: 500px) {
+		.content .img-thumbnail {
+			max-width: 100px;
+			max-height: 100px;
+		}
+		.content .btn-sm {
+			padding: 6px 12px;
+			font-size: 14px;
+			line-height: 1.428571429;
+			border-radius: 4px;
+		}
+		.content {
+			font-size: 1em;
+		}
+	}
+	#outfit-table th {
+		text-align: center;
+	}
+	#outfit-table tr td {
+		vertical-align: middle;
+		text-align: center;
+	}
+	.content .btn-sm {
+		margin-bottom: 4px;
+	}
+	.content .btn-danger {
+		margin-right: 4px;
+	}
+	</style>
+{% endblock %}
+
+{% block content %}
+	{% include 'includes/sysmsgs.html' %}
+	<h2>Wear History</h2>
+	{% if outfits %}
+	<h3>Outfits</h3>
+	<table id="outfit-table" class="table table-striped table-condensed">
+		<thead>
+			<th>Image</th>
+			<th>Outfit</th>
+			<th># of Wears</th>
+			<th>Last Worn</th>
+			<th>Options<th>
+		</thead>
+		<tbody>
+			{% for outfit in outfits %}
+			<tr>
+				<td>
+					{% if outfit.image_url %}
+					<img class="img-thumbnail" src="{{outfit.image_url}}">
+					{% endif %}
+				</td>
+				<td>
+					<a href="{{outfit.get_absolute_url}}">{{outfit.name}}</a>
+				</td>
+				<td>
+					{{outfit.wear_count}}
+				</td>
+				<td>
+					{{outfit.last_worn|date:'F j, Y'}}
+				</td>
+				<td>
+					<a class="btn btn-sm btn-success glyphicon glyphicon-edit" href="/outfit/{{outfit.id}}/edit/" title="Edit Outfit"></a>
+					<br/>
+					<a class="btn btn-sm btn-danger outfit-delete glyphicon glyphicon-remove" data-name="{{outfit.name}}" href="/outfit/{{outfit.id}}/delete/" title="Delete Outfit"></a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+	<div class="alert alert-info">
+		You have not worn any outfits! You can do so <a class="alert-link" href="/outfits/">here</a>, or create outfits <a class="alert-link" href="/outfit/create/">here</a>.
+	</div>
+	{% endif %}
+	{% if items %}
+	<h3>Items</h3>
+	<table id="outfit-table" class="table table-striped table-condensed">
+		<thead>
+			<th>Image</th>
+			<th>Item</th>
+			<th># of Wears</th>
+			<th>Last Worn</th>
+			<th>Options<th>
+		</thead>
+		<tbody>
+			{% for item in items %}
+			<tr>
+				<td>
+					{% with item.images.all as images %}
+					{% if images %}
+					{% if item.default_image %}
+					<img class="img-thumbnail" src="{{item.default_image.image.url}}">
+					{% else %}
+					{% with images|first as image %}
+					<img class="img-thumbnail" src="{{image.image.url}}">
+					{% endwith %}
+					{% endif %}
+					{% endif %}
+					{% endwith %}
+				</td>
+				<td>
+					{% if item.company %}{{item.company}}: {% endif %}{{item.name}}{% if item.colorway %} in {{item.colorway}}{% endif %}
+				</td>
+				<td>
+					{{item.wear_count}}
+				</td>
+				<td>
+					{{item.last_worn|date:'F j, Y'}}
+				</td>
+				<td>
+					<a class="btn btn-sm btn-success glyphicon glyphicon-edit" href="/item/{{item.id}}/edit/"></a>
+					<br/>
+					<button class="btn btn-sm btn-danger item-delete glyphicon glyphicon-remove" data-id="{{item.id}}" data-name="{{item.name}}"></button>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% else %}
+	<div class="alert alert-info">
+		You have not worn any items! You can do so <a class="alert-link" href="/worn/">here</a>, or create items <a class="alert-link" href="/item/create/">here</a>.
+	</div>
+	{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$(function(){
+	$('.item-delete').on('click', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		var	name = $(this).attr('data-name'),
+			item_id = $(this).attr('data-id'),
+			$row  = $(this).closest('tr'),
+			confirm_del = confirm('Are you sure you want to delete '+ name +'?');
+		if (confirm_del) {
+			$.ajax({
+				url: "/item/"+item_id+'/delete/',
+				success: function(){
+					$row.animate({ height: 'toggle', opacity: 'toggle' }, 500, function(){
+						$row.remove();
+					});
+				},
+				error: function(){
+					alert('An error has occurred.');
+				}
+			});
+		}
+		return false;
+	});
+});
+</script>
+{% endblock %}

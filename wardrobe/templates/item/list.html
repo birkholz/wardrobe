@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load custom_tags staticfiles %}
+
+{% block page_name %}Wardrobe{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/outfit_create.css" %}" />
+{% endblock %}
+
+{% block content %}
+	{% if first_time %}
+	<div class="alert alert-dismissable alert-info">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		This is where you'll find your clothes. Next, add more clothes to enable the ability to create outfits! You can add more clothes by clicking <a class="alert-link" href="{% url "item_create" %}">Add Clothing</a> here, or above under <strong>Clothes</strong>. 
+	</div>
+	{% endif %}
+	{% if puser %}
+	<h2 class="text-center">Viewing <span class="text-info">{{puser.username}}</span>'s Wardrobe</h2>
+	{% endif %}
+	{% include 'includes/filters.html' %}
+	<div id="tile-container">
+		{% for item in items %}
+		{% include 'item/tile.html' %}
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static "js/outfits.js" %}"></script>
+{% endblock %}

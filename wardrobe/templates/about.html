@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block page_name %}About{% endblock %}
+
+{% block robots %}
+<meta name="robots" content="nofollow"/>
+{% endblock %}
+
+{% block extra_css %}
+<link href='http://fonts.googleapis.com/css?family=Bilbo+Swash+Caps' rel='stylesheet' type='text/css'>
+<style>
+#about {
+	font-size: 16px;
+	max-width: 550px;
+}
+span.signature:before {
+	content: "- ";
+	display: inline;
+	color: #aaa;
+}
+span.signature {
+	font-size: 32px;
+	font-family: 'Bilbo Swash Caps', cursive;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div id="about" class="container well">
+<h2 class="text-center">About</h2>
+<p>Organize your clothes and keep track of when you last wore an outfit, when you purchased an item, how much it cost, and more! Create outfits visually and share them with others. View breakdowns of how much you've paid for your clothes, how much you own, or other metadata, and do it all from anywhere, even from your phone or tablet!</p>
+<p>I made the first version of this website in a single weekend as a challenge for myself, but also because I was starting to buy lots of new clothes (thanks to help from <a href="http://reddit.com/r/malefashionadvice">/r/malefashionadvice</a>) and wanted a way to keep track of all the meta information for each item, and a way to build outfits visually regardless of where I am, or if the clothing is in the wash, or any other reason. I hope you find the site helpful! If you have any suggestions or want to report bugs, you can do so at the <a href="https://bitbucket.org/birkholz/wardrobe/issues">issue tracker</a>, or email me at <a href="mailto:brandon@myoutfits.co">brandon@myoutfits.co</a>.</p>
+<span class="signature">Brandon Birkholz</span>
+</div>
+{% endblock %}

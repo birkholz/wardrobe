@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load custom_tags staticfiles %}
+
+{% block page_name %}Items Worn{% endblock %}
+
+{% block body_classes %}worn{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/outfit_create.css" %}" />
+<style>
+#id_date {
+	width: 100%;
+}
+.input-group-addon {
+	top: 0;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+	<div id="no-date-error" style="display: none;" class="alert alert-danger">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Error</strong> You must enter a date.
+	</div>
+	<div id="server-error" style="display: none;" class="alert alert-danger">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Server Error</strong> The site failed to save. Please try again later.
+	</div>
+	<div id="no-items-error" style="display: none;" class="alert alert-danger">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Error</strong> You must select items.
+	</div>
+	<h3>Record Items as Worn</h3>
+	<div id="outfit-form" role="form">
+		<div class="form-group">
+			<label for="id_date">Date:</label>
+			<div class="input-group">
+				<span class="input-group-addon glyphicon glyphicon-calendar"></span>
+				<input type="text" name="date" id="id_date" value="{{todays_date}}" data-date-format="{{user.prefs.date_format|lower}}" class="form-control">
+			</div>
+		</div>
+		<div id="save-group" class="form-group">
+			<div class="btn btn-success btn-lg" id="save-worn-button">Save</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div id="drop-zone">
+		<span id="dz-help">Click on a tile to select or deselect it</span>
+	</div>
+	
+	{% include 'includes/filters.html' %}
+	<div id="tile-container">
+		{% for item in items %}
+		{% include 'item/tile.html' %}
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}" ></script>
+<script type="text/javascript" src="{% static "js/outfits.js" %}" ></script>
+<script typle="text/javascript">
+$(function(){
+	$('#id_date').datepicker().on('changeDate', function(){
+			$(this).datepicker('hide');
+		});
+});
+</script>
+{% endblock %}

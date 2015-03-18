@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block page_name %}Login{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/sign_in.css" %}" />
+{% endblock %}
+
+{% block container %}
+<div id="form-cont" class="container panel panel-default">
+	{% if register %}
+	<ul class="nav nav-tabs">
+		<li class="active" id="sign_in_tab">
+			<a href="#signin" data-toggle="tab">Sign In</a>
+		</li>
+		<li id="register_tab">
+			<a href="#register" data-toggle="tab">Create Account</a>
+		</li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane fade" id="register">
+			<form id="register-form" action="/register/" method="POST" autocomplete="off" role="form">
+				<div id="un-group" class="form-group">
+					<label for="username">Username</label>
+					<input type="text" id="un-input" name="username" value="" class="form-control">
+					<span id="un-unavail" style="display:none;" class="help-block">Username unavailable</span>
+					<span id="un-avail" style="display:none;" class="help-block">Username available!</span>
+					<span id="un-missing" style="display:none;" class="help-block">Please enter a username</span>
+				</div>
+				<div class="control-group">
+					<label for="password">Password</label>
+					<input id="pw1" type="password" name="password" value="" class="form-control">
+					<span id="pw1-missing" style="display:none;" class="help-block">Please enter a password</span>
+				</div>
+				<div class="control-group">
+					<label for="password2">Password Confirm</label>
+					<input id="pw2" type="password" name="password2" value="" class="form-control">
+					<span id="pw-mismatch" style="display:none;" class="help-block">Passwords entered do not match</span>
+					<span id="pw2-missing" style="display:none;" class="help-block">Please confirm password</span>
+				</div>
+				<div class="control-group">
+					<label for="email">Email</label>
+					<input type="text" name="email" value="" class="form-control">
+					<span id="email-missing" style="display:none;" class="help-block">Please enter an email</span>
+				</div>
+				<div class="control-group">
+					<!-- Button -->
+					<div class="text-center">
+						<button id="register-button" class="btn btn-lg btn-success">Register</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="tab-pane fade active in" id="signin">
+		{% endif %}
+			<form action='{% url 'login' %}' method="POST" autocomplete="on" role="form" {% if error %}class="has-error"{% endif %}>
+				{% if next %}
+				<input type='hidden' name="next" value="{{next}}">
+				{% endif %}   
+				<div class="control-group">
+					<!-- Username -->
+					<label  for="username">Username</label>
+					<input type="text" id="username" name="username" placeholder="" class="form-control">
+				</div>
+				<div class="control-group">
+					<!-- Password-->
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" placeholder="" class="form-control">
+					{% if error %}
+					<p class="help-block">Your username/password is incorrect</p>
+					{% endif %}
+				</div>
+				<div class="control-group">
+					<!-- Button -->
+					<div class="text-center">
+						<button class="btn btn-lg btn-success">Login</button>
+					</div>
+				</div>
+			</form>
+	{% if register %}        
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	if (getURLParameter('register') != 'null') {
+		$('#signin').removeClass('active in');
+		$('#register').addClass('active in');
+		$('#sign_in_tab').removeClass('active');
+		$('#register_tab').addClass('active');
+	}
+	$('#un-input').on('change', function(){
+		$('#un-missing').hide();
+		$.get('/username_check/', {
+			username: $('#un-input').val()
+		},
+	    function(data){
+	        if(data == "yes"){
+				$('#un-group').removeClass('has-error').addClass('has-success');
+				$('#un-avail').show();
+				$('#un-unavail').hide();
+	        } else {
+	            $('#un-group').removeClass('has-success').addClass('has-error');
+				$('#un-avail').hide();
+				$('#un-unavail').show();
+	        }
+		});
+	});
+	$('#pw1, #pw2').on('change', function(){
+		$('#pw1-missing, #pw2-missing').hide();
+		if ($('#pw1').val() == '') {
+			$('#pw1-missing').show();
+			$('#pw1').closest('.control-group').addClass('has-error').removeClass('has-success');
+		}
+		else if ($('#pw2').val() == '') {
+			$('#pw2-missing').show();
+			$('#pw2').closest('.control-group').addClass('has-error').removeClass('has-success');
+		}
+		else if ($('#pw2').val() == $("#pw1").val()) {
+			$('#pw2').closest('.control-group').addClass('has-success').removeClass('has-error');
+			$('#pw1').closest('.control-group').addClass('has-success').removeClass('has-error');
+			$('#pw1-missing, #pw2-missing').hide();
+		}
+		else {
+			$('#pw2').closest('.control-group').addClass('has-error').removeClass('has-success');
+			$('#pw1').closest('.control-group').addClass('has-error').removeClass('has-success');
+			$('#pw2-missing').show();
+		}
+	});
+	$('#register-button').on('click', function(e){
+		register();
+		e.preventDefault();
+		return False;
+	});
+});
+
+function register(){
+	var email = $('input[name=email]').val(),
+		first_name = $('input[name=first_name]').val(),
+		last_name = $('input[name=last_name]').val(),
+		user_name = $('#un-field').val(),
+		password1 = $('#pw1').val(),
+		password2 = $('#pw2').val(),
+		cont = true;
+	if (username == '') {
+		$('#un-group').addClass('has-error').removeClass('has-success').find('.help-block').hide();
+		$('#un-missing').show();
+		cont = false;
+	}
+	else $('#un-group').addClass('has-success').removeClass('has-error').find('.help-block').hide();
+	if (password1 == '') {
+		$('#pw1').closest('.control-group').addClass('has-error').removeClass('has-success').find('.help-block').hide();
+		$('#pw1-missing').show();
+		cont = false;
+	}
+	else $('#pw1').closest('.control-group').addClass('has-success').removeClass('has-error').find('.help-block').hide();
+	if (password2 == '') {
+		$('#pw2').closest('.control-group').addClass('has-error').removeClass('has-success').find('.help-block').hide();
+		$('#pw2-missing').show();
+		cont = false;
+	}
+	else $('#pw2').closest('.control-group').addClass('has-success').removeClass('has-error').find('.help-block').hide();
+	if (email == '') {
+		$('input[name=email]').closest('.control-group').addClass('has-error').removeClass('has-success').find('.help-block').hide();
+		$('#email-missing').show();
+		cont = false;
+	}
+	else $('input[name=email]').closest('.control-group').addClass('has-success').removeClass('has-error').find('.help-block').hide();
+	if (cont) {
+		$('#register-form').submit();
+	}
+
+}
+</script>
+{% endblock %}

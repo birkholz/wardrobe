@@ -1,0 +1,11 @@
+/* TEAM */
+    Developer: Brandon Birkholz
+    Contact: brandonjbirkholz [at] gmail.com
+    From: Fresno, CA, United States of America
+
+/* SITE */
+    Last update: e'rryday
+    Language: English
+    Doctype: HTML5
+    IDE: Sublime Text, Mercurial, Bitbucket
+    Repository: https://bitbucket.org/birkholz/wardrobe/

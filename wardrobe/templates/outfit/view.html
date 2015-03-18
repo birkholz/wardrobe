@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block page_name %}{{outfit.name}}{% endblock %}
+
+{% block extra_css %}
+<style>
+#outfit-image {
+  max-width:22%;
+  margin-right: 2%;
+  max-height: 500px;
+  display: block;
+  float:left;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+#outfit-image img {
+  width: 100%;
+}
+#tile-cont-wrapper {
+  float:left;
+  width: 74%;
+}
+#tile-cont-wrapper #tile-container {
+  margin-top: 0;
+}
+span.value {
+	margin-left: 60px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% if user == outfit.owner %}
+<a class="btn btn-lg btn-success pull-right" style="margin-top:10px;" href="{% url 'outfit_edit' outfit.id %}">Edit</a>
+{% endif %}
+<h2>{{outfit.name}}</h2>
+<h4>by {{outfit.owner}}{% if outfit.owner == user %}<span class="value">Total Value: {{outfit.owner.prefs.get_currency_symbol|safe}}{{outfit.value}}{% endif %}</h4>
+{% if outfit.image_url %}
+<div id="outfit-image">
+	<img src="{{outfit.image_url}}">
+</div>
+{% endif %}
+<div id="tile-cont-wrapper" {% if not outfit.image_url %}style="float: none; width:auto;"{% endif %}>
+	<div id="tile-container">
+		{% for item in outfit.items.all %}
+		{% include 'item/tile.html' %}
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+	$('#tile-container').imagesLoaded( function(){
+		$('#tile-container').isotope({
+			itemSelector: '.tile',
+		});
+	});
+</script>
+{% endblock %}

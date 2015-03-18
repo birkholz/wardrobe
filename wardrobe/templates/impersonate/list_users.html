@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block page_name %}Impersonate{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+	.col-md-2 {
+		margin: 10px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>Impersonate</h2>
+<br/>
+{% for user in users %}
+<div class="col-md-2">
+	<a class="btn btn-default" href="/impersonate/{{user.id}}/">{{user.username}} ({{user.items.count}}, {{user.outfits.count}})</a>
+</div>
+{% endfor %}
+{% endblock %}

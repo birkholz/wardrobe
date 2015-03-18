@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block page_name %}Edit Profile{% endblock %}
+
+{% block extra_css %}
+<style>
+.well, .content {
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#save-button {
+	margin-top: 30px;
+}
+#public_wardrobe_link {
+	background: #fff;
+	font-size: 0.9em;
+	border-radius: 5px;
+	padding: 0 2px;
+}
+@media (min-width: 550px) {
+	form .form-group {
+		width: 48%;
+	}
+	#gender_group, #password_group {
+		float: left;
+	}
+	#year_group, #password2_group {
+		float: right;
+	}
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="well">
+	{% if saved %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		Your changes have been saved!
+	</div>
+	{% endif %}
+	<form action='.' method="POST" role="form" autocomplete="off">
+		<h1 class="text-center">Edit Profile</h1>
+		<p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> Gender and Birth Year are collected anonymously and used for site-wide charts.</p>
+		<div id="gender_group" class="form-group{% if form.currency.errors %} has-error{% endif %}">
+			<label for="id_gender">Gender:</label>
+			<select id="id_gender" class="form-control" name="gender">
+				<option value="M" {% if user.prefs.gender == 'M' %}selected="selected"{% endif %}>Male</option>
+				<option value="F" {% if user.prefs.gender == 'F' %}selected="selected"{% endif %}>Female</option>
+			</select>
+			{% if form.gender.errors %}
+			<p class="help-block">{{form.gender.errors}}</p>
+			{% endif %}
+		</div>
+		<div id="year_group" class="form-group{% if form.birth_year.errors %} has-error{% endif %}">
+			<label for="id_birth_year">What year were your born?</label>
+			<input type="text" class="form-control" name="birth_year" id="id_birth_year" {% if user.prefs.birth_year %}value="{{user.prefs.birth_year}}"{% endif %}>
+			{% if form.birth_year.errors %}
+			<p class="help-block">{{form.birth_year.errors}}</p>
+			{% endif %}
+		</div>
+		<div class="clearfix"></div>
+		<div id="public_group" class="checkbox{% if form.public_wardrobe.errors %} has-error{% endif %}">
+			<label>
+				<input type="checkbox" name="public_wardrobe" id="id_public_wardrobe" {% if user.prefs.public_wardrobe %}checked{% endif %}>Make your wardrobe public?
+			</label>
+			{% if user.prefs.public_wardrobe %}
+			<p class="help-block">Other users can view your wardrobe at <a id="public_wardrobe_link" href="http://{{request.get_host}}/wardrobe/{{user.username}}/">{{request.get_host}}/wardrobe/{{user.username}}/</a></p>
+			{% endif %}
+			{% if form.public_wardrobe.errors %}
+			<p class="help-block">{{form.public_wardrobe.errors}}</p>
+			{% endif %}
+		</div>
+		<div class="clearfix"></div>
+		{% if pw_changed %}
+		<div class="alert alert-success alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			Your password has been changed!
+		</div>
+		{% endif %}
+		<h3 class="text-center">Change Password</h3>
+		<div id="password_group" class="form-group{% if password_error %} has-error{% endif %}">
+			<label for="id_password">New Password:</label>
+			<input type="password" class="form-control" name="password" id="id_password">
+		</div>
+		<div id="password2_group" class="form-group{% if password_error %} has-error{% endif %}">
+			<label for="id_password2">Confirm Password:</label>
+			<input type="password" class="form-control" name="password2" id="id_password2">
+		</div>
+		{% if password_error %}
+			<p class="help-block text-center" style="color:#b94a48;">{{password_error}}</p>
+		{% endif %}
+		<div class="text-center">
+			<button id="save-button" class="btn btn-lg btn-success">Save</button>
+			<div class="clearfix"></div>
+		</div>
+	</form>
+</div>	
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#id_time_zone').addClass('form-control');
+});
+</script>
+{% endblock %}

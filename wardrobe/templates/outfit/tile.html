@@ -1,0 +1,28 @@
+<div {% if request.path != '/' %}data-id="{{outfit.id}}" data-name="{{outfit.name}}" data-times-worn="{{outfit.get_wear_count}}"{% endif %} class="tile outfit_tile {% if not outfit.image_url %}no_image{% endif %}">
+	{% with outfit.get_items_count as item_count %}
+	<div class="top_left">{{outfit.get_items_count}} item{{outfit.get_items_count|pluralize}}{{outfit.get_worn_plural}}</div>
+	{% endwith %}
+	{% with outfit.value as value %}
+	{% if value %}
+	<div class="value">
+		{% if request.path != '/' %}
+		{{user.prefs.get_currency_symbol|safe}}{{value}}
+		{% else %}
+		${{value}}
+		{% endif %}
+	</div>
+	{% endif %}
+	{% endwith %}
+	{% if request.path != '/' and user.is_authenticated and user == outfit.owner %}
+	<div class="edit">
+		<a class='glyphicon glyphicon-edit' href="{% url 'outfit_edit' outfit.id %}"></a>
+		<a href="{% url 'outfit_delete' outfit.id %}" class='glyphicon glyphicon-remove'></a>
+	</div>
+	{% endif %}
+	<a href="{{outfit.get_absolute_url}}" class="name">{{outfit.name}}</a>
+	{% if outfit.image_url %}
+		<a href="{{outfit.get_absolute_url}}">
+			<img src="{{outfit.image_url}}">
+		</a>
+	{% endif %}
+</div>

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block page_name %}Localization{% endblock %}
+
+{% block extra_css %}
+<style>
+.well, .content {
+	max-width: 540px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#save-button {
+	margin-top: 30px;
+}
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="well">
+	{% if saved %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		Your preferences have been saved!
+	</div>
+	{% endif %}
+	<form action='.' method="POST" role="form" autocomplete="off">
+		<h2 class="text-center">Localization Settings</h2>
+		<p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> These options localize the site to your preferences.</p>
+		<div class="form-group{% if form.currency.errors %} has-error{% endif %}">
+			<label class="required" for="id_currency">Currency:</label>
+			<select id="id_currency" class="form-control" name="currency">
+				<option value="USD" {% if user.prefs.currency == 'USD' %}selected="selected"{% endif %}>USD $</option>
+				<option value="EUR" {% if user.prefs.currency == 'EUR' %}selected="selected"{% endif %}>EUR &euro;</option>
+				<option value="GBP" {% if user.prefs.currency == 'GBP' %}selected="selected"{% endif %}>GBP &pound;</option>
+				<option value="CAD" {% if user.prefs.currency == 'CAD' %}selected="selected"{% endif %}>CAD $</option>
+				<option value="AUD" {% if user.prefs.currency == 'AUD' %}selected="selected"{% endif %}>AUD $</option>
+			</select>
+			{% if form.currency.errors %}
+			<p class="help-block">{{form.currency.errors}}</p>
+			{% endif %}
+		</div>
+		<div class="form-group{% if form.time_zone.errors %} has-error{% endif %}">
+			<label class="required" for="id_time_zone">Time Zone:</label>
+			{{form.time_zone}}
+			{% if form.time_zone.errors %}
+			<p class="help-block">{{form.time_zone.errors}}</p>
+			{% endif %}
+		</div>
+		<div class="form-group{% if form.date_format.errors %} has-error{% endif %}">
+			<label class="required" for="id_date_format">Date Format:</label>
+			<select id="id_date_format" class="form-control" name="date_format">
+				<option value="MM/DD/YYYY" {% if user.prefs.date_format == 'MM/DD/YYYY' %}selected="selected"{% endif %}>MM/DD/YYYY</option>
+				<option value="DD/MM/YYYY" {% if user.prefs.date_format == 'DD/MM/YYYY' %}selected="selected"{% endif %}>DD/MM/YYYY</option>
+			</select>
+			{% if form.date_format.errors %}
+			<p class="help-block">{{form.date_format.errors}}</p>
+			{% endif %}
+		</div>
+		<div class="text-center">
+			<button id="save-button" class="btn btn-lg btn-success">Save</button>
+			<div class="clearfix"></div>
+		</div>
+	</form>
+</div>	
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#id_time_zone').addClass('form-control');
+	if ($('#id_time_zone').has('[selected]').length == 0){
+		$('#id_time_zone').val('America/Los_Angeles');
+	}
+});
+</script>
+{% endblock %}

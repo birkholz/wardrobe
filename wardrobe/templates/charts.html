@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load custom_tags staticfiles %}
+
+{% block page_name %}Charts{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static "css/data.css" %}" />
+{% endblock %}
+{% block extra_css %}
+
+{% endblock %}
+
+{% block content %}
+	<div class="data-col">
+		<div id="count_chart" class="bar_chart"></div>
+		<div class="bar_footer"></div>
+	</div>
+	<div class="data-col">
+		<div id="value_chart" class="bar_chart"></div>
+		<div class="bar_footer"></div>
+	</div>
+</div>
+<div id="help-text" class="container content">
+	<p>Only categories for which you have items are displayed above. Columns for categories that have sub-categories can be clicked on and "drilled into" to see the information for the sub-categories. You can then click the arrow in the top corner to return.</p>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" language="javascript" src="{% static "js/data.js" %}"></script>
+	<script type="text/javascript" language="javascript">
+	var value_data = {{value_json|safe}},
+	count_data = {{count_json|safe}};
+	$(document).ready(function () {
+		$('#count_chart').barChart({
+			title: 'Total Count',
+			sections: count_data,
+			reverse:true
+		});
+		$('#value_chart').barChart({
+			title: 'Total Value ({{user.prefs.get_currency_symbol|safe}})',
+			sections: value_data
+		});
+	});
+</script>
+{% endblock %}

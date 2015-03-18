@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block page_name %}Add Clothes{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/datepicker.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/item_create.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery.fileupload-ui.css" %}" />
+{% endblock %}
+
+{% block content %}
+{% if not user.items.all %}
+<div class="alert alert-info alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>Welcome!</strong> First, you'll need to add your clothing.
+</div>
+{% endif %}
+<div class="well">
+	<form action='.' method="POST" role="form">
+		{% csrf_token %}
+		<input type="hidden" id="image_uuids" name="image_uuids" {% if image_uuids %}value="{{image_uuids}}"{% endif %} />
+		<h2 class="text-center">{% if edit %}Edit{% else %}Add{% endif %} Clothes</h2>
+		<p class="help-block text-center">
+			<span class="required"></span> = Required
+			</p>
+ 
+ 		<div class="form-group{% if form.name.errors %} has-error{% endif %}">
+			<label for="id_name" class="control-label required"> Name:</label>
+			{{form.name}}
+			{% if form.name.errors %}
+			<span class="help-block">{{form.name.errors}}</span>
+			{% endif %}
+		</div>
+
+		<div class="form-group{% if form.category.errors %} has-error{% endif %}">
+			<label for="id_category" class=" control-label required"> Category:</label>
+			<select class="form-control" id="id_category" name="category">
+				<option value="" {% if not selected_cat %}selected="selected"{% endif %}>---------</option>
+				{% for cat in cats %}
+				{% if cat.is_top_level %}
+				<option value="{{cat.id}}" {% if selected_cat == cat or form.category.value == cat %}selected="selected"{% endif %}>{{cat.name}}</option>
+				{% if cat.has_children %}
+				{% for subcat in cat.subcats.all %}
+				<option value="{{subcat.id}}" {% if selected_cat == subcat or form.category.value == subcat %}selected="selected"{% endif %}>&nbsp;&nbsp;&#x251c;&#x2500;{{subcat.name}}</option>
+				{% endfor %}
+				{% endif %}
+				{% endif %}
+				{% endfor %}
+			</select>
+			{% if form.category.errors %}
+			<span class="help-block">{{form.category.errors}}</span>
+			{% endif %}
+		</div>
+		<div id="quantity-group" class="col-md-6 {% if form.quantity.errors %} has-error{% endif %}">
+			<label for="id_quantity" class="control-label required"> Quantity:</label>
+			{{form.quantity}}
+			{% if form.quantity.errors %}
+			<p class="help-block">{{form.quantity.errors}}</p>
+			{% endif %}
+		</div>
+ 		<div class="col-md-6 checkbox{% if form.owned.errors %} has-error{% endif %}">
+ 			<label class="control-label">
+ 			{{form.owned}} Owned
+ 			</label>
+ 			<p class="help-block">Unchecked = "wanted"</p>
+ 		</div>
+		<div class="clearfix"></div>
+
+		<div class="form-group">
+			<span class="btn btn-success fileinput-button">
+		        <i class="glyphicon glyphicon-plus"></i>
+		        <span>Add images...</span>
+		        <input id="fileupload" type="file" name="image" accept="image/*;capture=camera" multiple>
+		    </span>
+		    <br>
+		    <br>
+		    <div id="progress" class="progress">
+		        <div class="progress-bar progress-bar-success"></div>
+		    </div>
+		    <div id="files" class="files">
+		    	{% for iu in image_uploads %}
+				<div class="image_upload" data-img-url="{{iu.image.url}}">
+					<div data-title="Set as Default Image" data-uuid="{{iu.uuid}}" class="set_default_image_button glyphicon glyphicon-star {% if form.instance and form.instance.default_image == iu %}selected{% endif %}"></div>
+					<div data-title="Delete Image" data-uuid="{{iu.uuid}}" class="delete_image_button glyphicon glyphicon-remove"></div>
+				</div>
+		    	{% endfor %}
+		    </div>
+		    <div class="clearfix"></div>
+		</div>
+		<div class="form-group text-center">
+			<button id="add_fields_button" class="btn btn-default">
+				<span class="glyphicon glyphicon-list-alt"></span> Additional Fields
+			</button>
+			<p class="help-block">
+				See Additional Fields to add when you purchased it, how much you purchased it for, and more. Adding more information for an item will make the site much more functional.
+			</p>
+		</div>
+
+		<div id="add_fields" style="display: none;">
+			<div class="form-group {% if form.company_name.errors %}has-error{% endif %}">
+				<label for="id_company_name" class="control-label">Company Name:</label>
+				{{form.company_name}}
+				{% if form.company_name.errors %}
+				<p class="help-block">{{form.company_name.errors}}</p>
+				{% endif %}
+			</div>
+			<div id="colorway_group" class="col-md-6 form-group{% if form.colorway.errors %} has-error{% endif %}">
+			<label for="id_colorway"  class="control-label">Colorway:</label>
+				{{form.colorway}}
+				{% if form.colorway.errors %}
+				<span class="help-block">{{form.colorway.errors}}</span>
+				{% endif %}
+			</div>
+			<div id="size_group" class="col-md-6 form-group{% if form.size.errors %} has-error{% endif %}">
+				<label for="id_size" class="control-label">Size:</label>
+				{{form.size}}
+				{% if form.size.errors %}
+				<span class="help-block">{{form.size.errors}}</span>
+				{% endif %}
+			</div>
+			<div class="clearfix"></div>
+			<div class="form-group{% if form.purchased_from.errors %} has-error{% endif %}">
+				<label for="id_purchased_from" class="control-label">Purchase Link:</label>
+				{{form.purchased_from}}
+				<p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> This link will be what users see when clicking the company name on a tile.</p>
+				{% if form.purchased_from.errors %}
+				<span class="help-block">{{form.purchased_from.errors}}</span>
+				{% endif %}
+			</div>
+			<div id="cost_group" class="col-md-6 form-group{% if form.cost.errors %} has-error{% endif %}">
+				<label for="id_cost" class="control-label">How much I paid:</label>
+				<div class="input-group">
+					<span class="input-group-addon">{{user.prefs.get_currency_symbol|safe}}</span>
+					{{form.cost}}
+				</div>
+				{% if form.cost.errors %}
+				<p class="help-block">{{form.cost.errors}}</p>
+				{% endif %}
+			</div>
+			<div id="purchase_date_group" class="col-md-6 form-group{% if form.purchase_date.errors %} has-error{% endif %}">
+				<label for="id_purchase_date" class="control-label">When I purchased it:</label>
+				<div class="input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					{{form.purchase_date}}
+				</div>
+				{% if form.purchase_date.errors %}
+				<span class="help-block">{{form.purchase_date.errors}}</span>
+				{% endif %}
+			</div>
+			<div class="clearfix"></div>
+			<div class="form-group{% if form.notes.errors %} has-error{% endif %}">
+				<label for="id_notes" class="control-label">Personal Notes:</label>
+				<textarea id="id_notes" maxlength="1000" name="notes" rows=4 class="form-control">{% if form.notes.value %}{{form.notes.value}}{% elif outfit and outfit.notes %}{{outfit.notes}}{% endif %}</textarea>
+				{% if form.notes.errors %}
+				<span class="help-block">{{form.notes.errors}}</span>
+				{% endif %}
+			</div>
+			<p class="help-block">
+				<span class="glyphicon glyphicon-info-sign"></span>
+				The tile preview below is what your clothing item will look like when creating outfits or browsing your wardrobe. To allow the site to work at its best, please fill in as much info as you can.
+			</p>
+
+		</div>
+
+		<div class="form-group">
+			<div class="text-center">
+				<div id="tile-wrapper">
+					<h5>Tile Preview</h5>
+					<div class="tile">
+						<div class="top_left"></div>
+						<div class="value"></div>
+						<span class="name"></span>
+						<span class="item-color"></span>
+						<img id="tile-img" src="">
+					</div>
+				</div>
+				<button id="save-button" class="btn btn-lg btn-success">{% if edit %}Save{% else %}<span class="glyphicon glyphicon-plus"></span> Add{% endif %}</button>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</form>
+</div>	
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/bootstrap-datepicker.js" %}" ></script>
+<script type="text/javascript" src="{% static "js/upload/jquery.ui.widget.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/load-image.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/canvas-to-blob.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/jquery.iframe-transport.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/jquery.fileupload.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/jquery.fileupload-process.js" %}"></script>
+<script type="text/javascript" src="{% static "js/upload/jquery.fileupload-image.js" %}"></script>
+<script>
+	$(document).ready(function(){
+		$('input, textarea, #id_company_name').addClass('form-control');
+		$('#id_quantity').attr('type', 'number').attr('min', '1');
+		$('#id_owned').removeClass('form-control');
+		$('.image_upload').each(function(){
+			var iu = $(this);
+			var image_url = $(this).attr('data-img-url');
+			loadImage(
+				image_url,
+				function (img) {
+					var html = $('<a/>')
+						.attr('href', image_url)
+						.attr('target', '_blank')
+						.append(img);
+					iu.append(html);
+				},
+				{
+					maxWidth: 100,
+					maxHeight: 100,
+					minWidth: 100,
+					minHeight: 100,
+					canvas: true,
+					crop: true,
+				});
+		});
+		$(document).on('click', '.delete_image_button', function(){
+			var uuid = $(this).attr('data-uuid'),
+				iu = $(this).closest('.image_upload');
+			$.ajax({
+				url: '/image_upload/'+uuid+'/delete/',
+				type: 'POST',
+				success: function(){
+					iu.remove();
+					var uuids = $('#image_uuids').val().split(',');
+					var index = uuids.indexOf(uuid);
+					if (index > -1) uuids.splice(index, 1);
+					$('#image_uuids').val(uuids.join(','));
+				},
+				error: function (){
+					alert('An error has occurred');
+				}
+			})
+		});
+		$(document).on('click', '.set_default_image_button:not(.selected)', function(){
+			var $this = $(this),
+				uuid = $(this).attr('data-uuid'),
+				item_id = null;
+			{% if form.instance %}
+			item_id = "{{form.instance.id}}";
+			{% endif %}
+			if (item_id) {
+				$.ajax({
+					url: '/set_default_image/'+item_id+'/'+uuid+'/',
+					type: 'POST',
+					success: function(){
+						$('.set_default_image_button').removeClass('selected');
+						$this.addClass('selected');
+					},
+					error: function (){
+						alert('An error has occurred');
+					}
+				});
+			}
+		});
+		$('#id_purchase_date')
+			.datepicker({format: "{{user.prefs.date_format|lower}}"})
+			.on('changeDate', function(){
+				$(this).datepicker('hide');
+			});
+
+		$('#id_name').on('change', function(){
+			$('.name').text($(this).val());
+		});
+		$('#id_cost').on('change', function(){
+			$('.value').text('{{user.prefs.get_currency_symbol|safe}}'+$(this).val());
+		});
+		$('#id_company_name').autocomplete({
+			lookup: [{% for company in companies %}"{{company.name}}",{% endfor %}],
+			onSelect: function(sugg){
+				$('.top_left').text(sugg.value);
+			},
+			autoSelectFirst: true,
+			width: 360
+		}).on('keyup', function(){
+			$('.top_left').text($(this).val());
+		});
+		$('#id_colorway').on('change', function(){
+			$('.item-color').text($(this).val());
+		});
+		$('#id_image_url').on('change paste keyup', function(){
+			if ($(this).val() == '') $('#tile-img').hide();
+			else $('#tile-img').show();
+			$('#tile-img').attr('src', $(this).val());
+		});
+
+		$('#add_fields_button').on('click', function(){
+			$(this).parent().remove();
+			$('#add_fields').slideDown();
+			$('#tile-wrapper').show();
+		});
+		$('#id_owned').on('click', function(){
+			if ($(this).is(':checked')) {
+				$('label[for=id_cost]').html('How much I paid:');
+				$('#purchase_date_group').show();
+				$('#cost_group').addClass('col-md-6');
+			}
+			else {
+				$('label[for=id_cost]').html('How much it costs:');
+				$('#purchase_date_group').hide();
+				$('#cost_group').removeClass('col-md-6');
+			}
+		});
+
+		if ($('#id_owned').is(':checked') == false) {
+			$('label[for=id_cost]').html('How much it costs:');
+			$('#purchase_date_group').hide();
+			$('#cost_group').removeClass('col-md-6');
+		}
+
+		if ($('#id_name').val() != '') {
+			$('.name').text($('#id_name').val());
+			$('.value').text('{{user.prefs.get_currency_symbol|safe}}'+$('#id_cost').val());
+			if ($(this).val() == 'on') $('label[for=id_cost]').html('How much I paid:');
+			else $('label[for=id_cost]').html('How much it costs:');
+			$('.top_left').text($('#id_company_name').val());
+			$('.item-color').text($('#id_colorway').val());
+			if ($('#id_image_url').val() == '') $('#tile-img').hide();
+			else $('#tile-img').show();
+			$('#tile-img').attr('src', $('#id_image_url').val());
+		}
+		if ($('#id_image_url').val() || $('#id_cost').val() || $('#id_company_name').val() || $('#id_purchased_from').val() || $('#id_purchase_date').val() || $('#id_size').val() || $('#id_colorway').val() || $('#id_notes').val()) {
+			$('#add_fields_button').parent().remove();
+			$('#add_fields').slideDown();
+			$('#tile-wrapper').show();
+		}
+	});
+</script>
+<script type="text/javascript">
+	$(function () {
+	    var csrftoken = $.cookie('csrftoken'),
+	    	url = '/image_upload/{% if edit %}?item_id={{form.instance.id}}{% endif %}',
+	    	image_input = $('#image_uuids');
+	    $('#fileupload').fileupload({
+	        url: url,
+	        crossDomain: false,
+	        type: 'POST',
+	        dataType: 'json',
+	        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+	        maxFileSize: 5000000, // 5 MB
+	        // Enable image resizing, except for Android and Opera,
+	        // which actually support image resizing, but fail to
+	        // send Blob objects via XHR requests:
+	        disableImageResize: /Android(?!.*Chrome)|Opera/
+	            .test(window.navigator.userAgent),
+	        previewMaxWidth: 100,
+	        previewMaxHeight: 100,
+	        previewCrop: true
+	    }).on('fileuploadadd', function (e, data) {
+	        data.context = $('<div/>')
+	        	.addClass('image_upload')
+	        	.addClass('pending')
+	        	.appendTo('#files');
+	        $('#save-button').prop('disabled', true);
+	    }).on('fileuploadprogressall', function (e, data) {
+	        var progress = parseInt(data.loaded / data.total * 100, 10);
+	        $('#progress .progress-bar').css('width', progress + '%');
+	    }).on('fileuploadprocessalways', function (e, data) {
+	        var file = data.files[data.index];
+	        if (file.preview) data.context.append(file.preview);
+	    }).on('fileuploaddone', function (e, data) {
+	        $.each(data.result.files, function (index, file) {
+	        	data.context.removeClass('pending');
+	        	var link = $('<a/>')
+	                .attr('target', '_blank')
+	                .prop('href', file.url);
+	            data.context.children().wrap(link);
+	            var delete_button = $('<div data-uuid="'+file.name+'" class="delete_image_button glyphicon glyphicon-remove"></div>');
+	            data.context.append(delete_button);
+	            {% if edit %}
+	            var default_button = $('<div data-uuid="'+file.name+'" class="set_default_image_button glyphicon glyphicon-star"></div>');
+	            data.context.append(default_button);
+	            {% endif %}
+	            if (image_input.val() != '') 
+	            	image_input.val(image_input.val() + ',');
+	            image_input.val(image_input.val() + file.name);
+	        });
+	        if ($('.pending').length == 0) $('#save-button').prop('disabled', false);
+	    }).prop('disabled', !$.support.fileInput)
+	        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+	});
+</script>
+{% endblock %}

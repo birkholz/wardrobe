@@ -1,0 +1,9 @@
+{% for msg in sys_messages %}
+{% if user not in msg.users_read.all %}
+<div class="sysmsg alert alert-dismissable {% if msg.important %}alert-warning{% else %}alert-info{% endif %}">
+	<button type="button" class="close" data-msg-id="{{msg.id}}" aria-hidden="true">&times;</button>
+	{{msg.message|safe}}<br/>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- {{msg.author}}
+</div>
+{% endif %}
+{% endfor %}

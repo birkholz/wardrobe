@@ -1,0 +1,15 @@
+django==1.5.2
+south==0.8.2
+httplib2==0.8
+oauth2==1.5.211
+python-openid==2.2.5
+django-social-auth==0.7.27
+pytz==2013d
+django-timezone-field==1.0
+simplejson==3.3.0
+django-uuidfield==0.4.0
+pillow==2.1.0
+django-impersonate==0.8.0
+django-storages==1.1.8
+boto==2.12.0
+sorl-thumbnail==11.12

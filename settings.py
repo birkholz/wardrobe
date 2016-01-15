@@ -92,4 +92,4 @@ CACHES = {
 try:
     from local_settings import *
 except ImportError:
-    pass
+    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')

@@ -16,8 +16,12 @@ from models import Item, Category, Outfit, Company, SystemMessage, OutfitWornDat
 
 def index(request):
     user = User.objects.get(username='brandon')
-    item = user.items.order_by('?')[0]
-    outfit = user.outfits.order_by('?')[0]
+    try:
+        item = user.items.order_by('?')[0]
+        outfit = user.outfits.order_by('?')[0]
+    except:
+        item = None
+        outfit = None
     return render(request, 'index.html', {'item': item, 'outfit': outfit})
 
 

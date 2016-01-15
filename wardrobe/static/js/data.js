@@ -18,7 +18,7 @@ var chart_rendering = false;
 		this.render_speed = 200;
 		this.colors = options.colors || 'brights';
 		this.fill();
-	}
+	};
 
 	BarChart.prototype = {
 		constructor: BarChart,
@@ -33,8 +33,8 @@ var chart_rendering = false;
 				chart_obj = this;
 			chart.html('');
 			this.total_value = 0;
-			var brights = ['#FFF467', '#ACD372', '#7CC576', '#3BB878', '#1ABBB4', '#00BFF3', '#438CCA', '#5574B9', '#605CA8', '#855FA8', '#A763A8', '#F06EA9', '#F26D7D', '#F26C4F', '#F68E55', '#FBAF5C', '#FFF467', '#ACD372', '#7CC576', '#3BB878', '#1ABBB4', '#00BFF3', '#438CCA', '#5574B9', '#605CA8', '#855FA8', '#A763A8', '#F06EA9', '#F26D7D', '#F26C4F', '#F68E55', '#FBAF5C']
-			var pastels = ['#F7977A', '#F9AD81', '#FDC68A', '#FFF79A', '#C4DF9B', '#A2D39C', '#82CA9D', '#7BCDC8', '#6ECFF6', '#7EA7D8', '#8493CA', '#8882BE', '#A187BE', '#BC8DBF', '#F49AC2', '#F6989D', '#F7977A', '#F9AD81', '#FDC68A', '#FFF79A', '#C4DF9B', '#A2D39C', '#82CA9D', '#7BCDC8', '#6ECFF6', '#7EA7D8', '#8493CA', '#8882BE', '#A187BE', '#BC8DBF', '#F49AC2', '#F6989D']
+			var brights = ['#FFF467', '#ACD372', '#7CC576', '#3BB878', '#1ABBB4', '#00BFF3', '#438CCA', '#5574B9', '#605CA8', '#855FA8', '#A763A8', '#F06EA9', '#F26D7D', '#F26C4F', '#F68E55', '#FBAF5C', '#FFF467', '#ACD372', '#7CC576', '#3BB878', '#1ABBB4', '#00BFF3', '#438CCA', '#5574B9', '#605CA8', '#855FA8', '#A763A8', '#F06EA9', '#F26D7D', '#F26C4F', '#F68E55', '#FBAF5C'];
+			var pastels = ['#F7977A', '#F9AD81', '#FDC68A', '#FFF79A', '#C4DF9B', '#A2D39C', '#82CA9D', '#7BCDC8', '#6ECFF6', '#7EA7D8', '#8493CA', '#8882BE', '#A187BE', '#BC8DBF', '#F49AC2', '#F6989D', '#F7977A', '#F9AD81', '#FDC68A', '#FFF79A', '#C4DF9B', '#A2D39C', '#82CA9D', '#7BCDC8', '#6ECFF6', '#7EA7D8', '#8493CA', '#8882BE', '#A187BE', '#BC8DBF', '#F49AC2', '#F6989D'];
 			if (this.colors == 'pastels') colors = pastels;
 			else colors = brights;
 			for (var i=0;i<sects.length;i++) {
@@ -117,7 +117,7 @@ var chart_rendering = false;
 			})(sections.length);
 			chart_rendering = false;
 		}
-	}
+	};
 
 	$.fn.barChart = function ( option, val ) {
 		return this.each(function () {

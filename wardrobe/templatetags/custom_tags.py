@@ -1,5 +1,4 @@
 from django import template
-from datetime import date, timedelta
 
 register = template.Library()
 
@@ -31,7 +30,7 @@ def children_item_count(cat, user):
 
 @register.filter(name='format_date')
 def format_date(date, user):
-	if user.prefs.date_format == 'MM/DD/YYYY':
-		return date.strftime('%m/%d/%Y')
-	elif user.prefs.date_format == 'DD/MM/YYYY':
-		return date.strftime('%d/%m/%Y')
+    if user.prefs.date_format == 'MM/DD/YYYY':
+        return date.strftime('%m/%d/%Y')
+    elif user.prefs.date_format == 'DD/MM/YYYY':
+        return date.strftime('%d/%m/%Y')

@@ -1,276 +1,319 @@
 body {
-	font-family: 'Roboto';
+    font-family: 'Roboto';
 }
-.navbar-collapse{
-	padding: 0;
-}
-.navbar-nav {
-	margin: 7.5px 0px;
-}
-.dropdown .divider {
-	display: none;
-}
-.dropdown a.dropdown-toggle, .navbar-nav>.active>a {
-	background-color: transparent !important;
-}
+
 .navbar-collapse {
-	max-height: none;
+    padding: 0;
 }
+
+.navbar-nav {
+    margin: 7.5px 0px;
+}
+
+.dropdown .divider {
+    display: none;
+}
+
+.dropdown a.dropdown-toggle, .navbar-nav > .active > a {
+    background-color: transparent !important;
+}
+
+.navbar-collapse {
+    max-height: none;
+}
+
 .dropdown .caret {
-	display: none;
+    display: none;
 }
+
 header .glyphicon {
-	font-size: 15px;
-}
-@media (min-width: 768px) {
-	.navbar-nav {
-		margin: 0;
-	}
-	.dropdown .divider {
-		display: list-item;
-	}
-	.dropdown.open a.dropdown-toggle, .navbar-nav>.active>a {
-		background-color: #080808 !important;
-	}
-	.dropdown .caret {
-		display: inline-block;
-	}
-	.dropdown-menu .glyphicon {
-		font-size: 18px;
-		top: 2px;
-		right: 2px;
-	}
-}
-.navbar-brand {
-	position: relative;
-}
-#beta_tag {
-	position: absolute;
-	bottom: 0;
-	right: 4px;
-	color: #FFF;
-	background: #610B0B;
-	font-size: 12px;
-	line-height: 11px;
-	display: block;
-	padding: 0;
-	margin: 0;
-	border-radius: 3px;
-}
-#username_dropdown {
-	color: #fff;
-	background-color: transparent;
-	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
-	cursor: default;
-}
-.content {
-	background-color: #F7F7F7;
-	height: 100%;
-	border-top-right-radius: 6px;
-	border-top-left-radius: 6px;
-	padding: 20px 10px;
-}
-#outfit-column table {
-	width: 100%;
-}
-.alert-info a {
-	color: #2d6987;
-}
-.alert-warning a {
-	color: #a47e3c;
-}
-form .required:before {
-    color: #e32;
-    content: '*';
-    display:inline;
-}
-/* Tiles */
-.tile {
-	width: 226px;
-	background: #FFF;
-	border: 1px solid #eee;
-	border-radius: 3px;
-	margin: 2px;
-	-webkit-box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
-	-moz-box-shadow:    0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
-	box-shadow:         0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
-	padding: 4px 4px 6px 4px;
-	position:relative;
-}
-.tile .overlay {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 9990;
-	display: none;
-	background: rgba(150,200,255,0.7);
-}
-.tile .overlay span {
-	display: block;
-	position: absolute;
-	top: 50%;
-	width: 100%;
-	line-height:22px;
-	text-align: center;
-	font-size: 22px;
-	margin-top:-8px;
-	font-weight: 500;
-	color: #333;
-	background: rgba(150,200,255,0.3);
-}
-body.outfit .tile.selected .overlay, body.worn .tile.selected .overlay {
-	display: block;
-}
-.tile .value {
-	float: right;
-	font-size: 11px;
-	line-height:11px;
-	color: #aaa;
-}
-.tile .edit {
-	float: right;
-	height: 14px;
-	margin-top: -4px;
-	margin-right: 6px;
-	background: #FFF;
-	border-radius: 3px;
-	z-index: 9999;
-}
-.tile .glyphicon {
-	cursor: pointer;
-	color: #000;
-}
-.tile .glpyhicon-remove {
-	margin-left: 4px;
-}
-.tile .glyphicon-remove:hover {
-	color: rgba(250,0,0,1);
-	border-radius: 3px;
-}
-.tile .glyphicon-edit:hover {
-	border-radius: 3px;
-	color: rgba(0,140,0,1);
-}
-.tile .top_left {
-	float: left;
-	font-size: 11px;
-	line-height: 11px;
-	color: #444;
-}
-.tile a.top_left {
-	border-bottom: 1px solid #eee;
-}
-.tile .name {
-	display: block;
-	margin-top: 16px;
-	font-size: 16px;
-}
-.tile.no_image .name {
-	text-align: center;
-	font-size: 19px;
-}
-.outfit_tile .name {
-	font-size: 18px;
-	text-decoration: none;
-	color: #428bca;
-}
-.outfit_tile .non-link {
-	color: #333;
-}
-.outfit_tile.no_image .name {
-	font-size: 21px;
-}
-.tile .item-color {
-	display: block;
-	font-size: 12px;
-	font-style: italic;
-}
-.tile img {
-	width: 100%;
-}
-.tile .view_pictures_button {
-	position: absolute;
-	bottom: 6px;
-	right: 4px;
-	background: #FFF;
-	padding: 0px 4px 4px 4px;
-	font-size: 22px;
-	line-height: 22px;
-	opacity: 0.6;
-	border-top-left-radius: 3px;
-	cursor: pointer;
-	transition: opacity 0.5s;
+    font-size: 15px;
 }
 
 @media (min-width: 768px) {
-	.tile .edit {
-		opacity: 0;
-		transition: opacity 0.5s;
-	}
-	.tile:hover .edit {
-		opacity: 1;
-	}
-	.tile .view_pictures_button {
-		opacity: 0;
-	}
-	.tile:hover .view_pictures_button {
-		opacity: 0.5;
-	}
-	.tile .view_pictures_button:hover {
-		opacity: 1;
-	}
+    .navbar-nav {
+        margin: 0;
+    }
+
+    .dropdown .divider {
+        display: list-item;
+    }
+
+    .dropdown.open a.dropdown-toggle, .navbar-nav > .active > a {
+        background-color: #080808 !important;
+    }
+
+    .dropdown .caret {
+        display: inline-block;
+    }
+
+    .dropdown-menu .glyphicon {
+        font-size: 18px;
+        top: 2px;
+        right: 2px;
+    }
+}
+
+.navbar-brand {
+    position: relative;
+}
+
+#beta_tag {
+    position: absolute;
+    bottom: 0;
+    right: 4px;
+    color: #FFF;
+    background: #610B0B;
+    font-size: 12px;
+    line-height: 11px;
+    display: block;
+    padding: 0;
+    margin: 0;
+    border-radius: 3px;
+}
+
+#username_dropdown {
+    color: #fff;
+    background-color: transparent;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    cursor: default;
+}
+
+.content {
+    background-color: #F7F7F7;
+    height: 100%;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    padding: 20px 10px;
+}
+
+#outfit-column table {
+    width: 100%;
+}
+
+.alert-info a {
+    color: #2d6987;
+}
+
+.alert-warning a {
+    color: #a47e3c;
+}
+
+form .required:before {
+    color: #e32;
+    content: '*';
+    display: inline;
+}
+
+/* Tiles */
+.tile {
+    width: 226px;
+    background: #FFF;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin: 2px;
+    -webkit-box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
+    -moz-box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
+    box-shadow: 0px 1px 2px rgba(50, 50, 50, 0.2), 0px 2px 0px rgba(50, 50, 50, 0.1);
+    padding: 4px 4px 6px 4px;
+    position: relative;
+}
+
+.tile .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9990;
+    display: none;
+    background: rgba(150, 200, 255, 0.7);
+}
+
+.tile .overlay span {
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    line-height: 22px;
+    text-align: center;
+    font-size: 22px;
+    margin-top: -8px;
+    font-weight: 500;
+    color: #333;
+    background: rgba(150, 200, 255, 0.3);
+}
+
+body.outfit .tile.selected .overlay, body.worn .tile.selected .overlay {
+    display: block;
+}
+
+.tile .value {
+    float: right;
+    font-size: 11px;
+    line-height: 11px;
+    color: #aaa;
+}
+
+.tile .edit {
+    float: right;
+    height: 14px;
+    margin-top: -4px;
+    margin-right: 6px;
+    background: #FFF;
+    border-radius: 3px;
+    z-index: 9999;
+}
+
+.tile .glyphicon {
+    cursor: pointer;
+    color: #000;
+}
+
+.tile .glpyhicon-remove {
+    margin-left: 4px;
+}
+
+.tile .glyphicon-remove:hover {
+    color: rgba(250, 0, 0, 1);
+    border-radius: 3px;
+}
+
+.tile .glyphicon-edit:hover {
+    border-radius: 3px;
+    color: rgba(0, 140, 0, 1);
+}
+
+.tile .top_left {
+    float: left;
+    font-size: 11px;
+    line-height: 11px;
+    color: #444;
+}
+
+.tile a.top_left {
+    border-bottom: 1px solid #eee;
+}
+
+.tile .name {
+    display: block;
+    margin-top: 16px;
+    font-size: 16px;
+}
+
+.tile.no_image .name {
+    text-align: center;
+    font-size: 19px;
+}
+
+.outfit_tile .name {
+    font-size: 18px;
+    text-decoration: none;
+    color: #428bca;
+}
+
+.outfit_tile .non-link {
+    color: #333;
+}
+
+.outfit_tile.no_image .name {
+    font-size: 21px;
+}
+
+.tile .item-color {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.tile img {
+    width: 100%;
+}
+
+.tile .view_pictures_button {
+    position: absolute;
+    bottom: 6px;
+    right: 4px;
+    background: #FFF;
+    padding: 0px 4px 4px 4px;
+    font-size: 22px;
+    line-height: 22px;
+    opacity: 0.6;
+    border-top-left-radius: 3px;
+    cursor: pointer;
+    transition: opacity 0.5s;
+}
+
+@media (min-width: 768px) {
+    .tile .edit {
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
+
+    .tile:hover .edit {
+        opacity: 1;
+    }
+
+    .tile .view_pictures_button {
+        opacity: 0;
+    }
+
+    .tile:hover .view_pictures_button {
+        opacity: 0.5;
+    }
+
+    .tile .view_pictures_button:hover {
+        opacity: 1;
+    }
 }
 
 /**** Isotope Filtering ****/
 
 .isotope-item {
-  z-index: 2;
+    z-index: 2;
 }
 
 .isotope-hidden.isotope-item {
-  pointer-events: none;
-  z-index: 1;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /**** Isotope CSS3 transitions ****/
 
 @media (min-width: 740px) {
-	.isotope,
-	.isotope .isotope-item {
-	  -webkit-transition-duration: 0.8s;
-	     -moz-transition-duration: 0.8s;
-	      -ms-transition-duration: 0.8s;
-	       -o-transition-duration: 0.8s;
-	          transition-duration: 0.8s;
-	}
+    .isotope,
+    .isotope .isotope-item {
+        -webkit-transition-duration: 0.8s;
+        -moz-transition-duration: 0.8s;
+        -ms-transition-duration: 0.8s;
+        -o-transition-duration: 0.8s;
+        transition-duration: 0.8s;
+    }
 
-	.isotope {
-	  -webkit-transition-property: height, width;
-	     -moz-transition-property: height, width;
-	      -ms-transition-property: height, width;
-	       -o-transition-property: height, width;
-	          transition-property: height, width;
-	}
+    .isotope {
+        -webkit-transition-property: height, width;
+        -moz-transition-property: height, width;
+        -ms-transition-property: height, width;
+        -o-transition-property: height, width;
+        transition-property: height, width;
+    }
 
-	.isotope .isotope-item {
-	  -webkit-transition-property: -webkit-transform, opacity;
-	     -moz-transition-property:    -moz-transform, opacity;
-	      -ms-transition-property:     -ms-transform, opacity;
-	       -o-transition-property:      -o-transform, opacity;
-	          transition-property:         transform, opacity;
-	}
+    .isotope .isotope-item {
+        -webkit-transition-property: -webkit-transform, opacity;
+        -moz-transition-property: -moz-transform, opacity;
+        -ms-transition-property: -ms-transform, opacity;
+        -o-transition-property: -o-transform, opacity;
+        transition-property: transform, opacity;
+    }
 
-	/**** disabling Isotope CSS3 transitions ****/
-
-	.isotope.no-transition,
-	.isotope.no-transition .isotope-item,
-	.isotope .isotope-item.no-transition {
-	  -webkit-transition-duration: 0s;
-	     -moz-transition-duration: 0s;
-	      -ms-transition-duration: 0s;
-	       -o-transition-duration: 0s;
-	          transition-duration: 0s;
-	}
+    /**** disabling Isotope CSS3 transitions ****/
+    .isotope.no-transition,
+    .isotope.no-transition .isotope-item,
+    .isotope .isotope-item.no-transition {
+        -webkit-transition-duration: 0s;
+        -moz-transition-duration: 0s;
+        -ms-transition-duration: 0s;
+        -o-transition-duration: 0s;
+        transition-duration: 0s;
+    }
 }

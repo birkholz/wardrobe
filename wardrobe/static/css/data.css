@@ -1,143 +1,168 @@
 .content {
-	padding: 0;
-	max-width: 360px;
+    padding: 0;
+    max-width: 360px;
 }
+
 #help-text {
-	max-width: 600px;
-	padding: 20px;
-	font-size: 16px;
+    max-width: 600px;
+    padding: 20px;
+    font-size: 16px;
 }
+
 .data-col {
-	width: 360px;
-	margin: 0;
-	padding: 0;
-	float: left;
+    width: 360px;
+    margin: 0;
+    padding: 0;
+    float: left;
 }
+
 .bar_chart {
-	width: 100%;
-	margin: 10px 0;
-	height: 240px;
-	position: relative;
-	background: #FFF;
-	overflow: hidden;
-	font-size: 10px;
-	font-family: Roboto, sans-serif;
-	font-weight: 400;
-	z-index: 500;
-	border: 1px solid #F0F0F0;
-	color: #111;
-	border-radius: 5px;
+    width: 100%;
+    margin: 10px 0;
+    height: 240px;
+    position: relative;
+    background: #FFF;
+    overflow: hidden;
+    font-size: 10px;
+    font-family: Roboto, sans-serif;
+    font-weight: 400;
+    z-index: 500;
+    border: 1px solid #F0F0F0;
+    color: #111;
+    border-radius: 5px;
 }
+
 .bar_title {
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding: 3px 4px;
-	font-size: 14px;
-	font-weight: 400;
-	z-index: 650;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 3px 4px;
+    font-size: 14px;
+    font-weight: 400;
+    z-index: 650;
 }
+
 .bar_total {
-	line-height: 16px;
-	font-size: 16px;
-	font-weight: 400;
+    line-height: 16px;
+    font-size: 16px;
+    font-weight: 400;
 }
+
 .bar_chart.reverse .bar_title {
-	right: 0;
-	left: auto;
-	text-align: right;
+    right: 0;
+    left: auto;
+    text-align: right;
 }
+
 .bar_chart .glyphicon {
-	opacity: 0.75;
-	cursor: pointer;
-	font-size: 24px;
-	margin-top: -3px;
+    opacity: 0.75;
+    cursor: pointer;
+    font-size: 24px;
+    margin-top: -3px;
 }
+
 .bar_chart .glyphicon:hover {
-	opacity: 1;
+    opacity: 1;
 }
+
 .bar_container {
-	position: absolute;
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	z-index: 600;
-	cursor: pointer;
-	max-height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    z-index: 600;
+    cursor: pointer;
+    max-height: 100%;
 }
+
 .bar_container:not(.no_children):hover {
-	background: #EFEFEF;
+    background: #EFEFEF;
 }
+
 .bar_container.no_children {
-	cursor: default;
+    cursor: default;
 }
+
 .bar_chart.drilldown .bar_container {
-	cursor: default;
+    cursor: default;
 }
+
 .bar_section {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	overflow: visible;
-	z-index: 550;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	min-height: 20px;
-	max-height: 100%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    overflow: visible;
+    z-index: 550;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    min-height: 20px;
+    max-height: 100%;
 }
+
 .bar_container:not(.no_children):hover .bar_section {
-	opacity: 0.8;
+    opacity: 0.8;
 }
+
 .bar_value {
-	text-align: center;
-	min-width: 100%;
-	position: absolute;
-	overflow: visible;
-	z-index: 600;
-	margin-top: -14px;
+    text-align: center;
+    min-width: 100%;
+    position: absolute;
+    overflow: visible;
+    z-index: 600;
+    margin-top: -14px;
 }
+
 .bar_container.biggest .bar_value {
-	color: #000;
-	top: 50%;
+    color: #000;
+    top: 50%;
 }
+
 .bar_value span {
-	display: inline-block;
+    display: inline-block;
 }
+
 .bar_label {
-	position: absolute;
-	overflow: visible;
-	bottom: 0;
-	text-align: center;
-	min-width: 100%;
-	z-index: 650;
+    position: absolute;
+    overflow: visible;
+    bottom: 0;
+    text-align: center;
+    min-width: 100%;
+    z-index: 650;
 }
+
 .bar_container:hover .bar_label {
-	z-index: 700;
+    z-index: 700;
 }
 
 @media (min-width: 600px) {
-	.content {
-		max-width: 1240px;
-	}
-	.data-col {
-		width: 600px;
-		margin: 0 10px;
-	}
-	.bar_chart {
-		height: 400px;
-		font-size: 14px;
-	}
-	.bar_title {
-		font-size: 18px;
-	}
-	.bar_title .glyphicon {
-		font-size: 30px;
-		margin-top: -6px;
-	}
-	.bar_total {
-		font-size: 20px;
-	}
-	.bar_value {
-		margin-top: -20px;
-	}
+    .content {
+        max-width: 1240px;
+    }
+
+    .data-col {
+        width: 600px;
+        margin: 0 10px;
+    }
+
+    .bar_chart {
+        height: 400px;
+        font-size: 14px;
+    }
+
+    .bar_title {
+        font-size: 18px;
+    }
+
+    .bar_title .glyphicon {
+        font-size: 30px;
+        margin-top: -6px;
+    }
+
+    .bar_total {
+        font-size: 20px;
+    }
+
+    .bar_value {
+        margin-top: -20px;
+    }
 }

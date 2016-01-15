@@ -4,45 +4,52 @@
 {% block title %}<title>My Outfits</title>{% endblock %}
 
 {% block robots %}
-<meta name="robots" content="nofollow"/>
+    <meta name="robots" content="nofollow"/>
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static "css/home.css" %}" >
+    <link rel="stylesheet" href="{% static "css/home.css" %}">
 {% endblock %}
 
 {% block container %}
-<div id="main" class="container">
-	<div class="jumbotron">
-        <h1>My Outfits</h1>
-        <p class="lead">Organize your clothes and keep track of when you last wore an outfit, when you purchased an item, how much it cost, and more! Create outfits visually and share them with others. View breakdowns of how much you've paid for your clothes, how much you own, or other metadata, and do it all from anywhere, even from your phone or tablet!</p>
-        <p><a class="btn btn-lg btn-success" href="{% if request.user.is_authenticated %}{% url 'outfits' %}{% else %}{% url 'login' %}?register=true{% endif %}">Organize Your Clothes Now</a></p>
+    <div id="main" class="container">
+        <div class="jumbotron">
+            <h1>My Outfits</h1>
+            <p class="lead">Organize your clothes and keep track of when you last wore an outfit, when you purchased an
+                item, how much it cost, and more! Create outfits visually and share them with others. View breakdowns of
+                how much you've paid for your clothes, how much you own, or other metadata, and do it all from anywhere,
+                even from your phone or tablet!</p>
+            <p><a class="btn btn-lg btn-success" href="
+                    {% if request.user.is_authenticated %}{% url 'outfits' %}{% else %}{% url 'login' %}?register=true{% endif %}">Organize
+                Your Clothes Now</a></p>
+        </div>
+        <div class='row marketing'>
+            <div class="col-wrapper">
+                <!--googleoff: all-->
+                <div lass="item_col col-lg-6">
+                    {% include 'item/tile.html' %}
+                </div>
+                <!--googleon: all-->
+                <div class="item_desc_col col-lg-6">
+                    <h4>Clothing</h4>
+                    <p>Your clothes are organized visually. You'll be able to view all your clothes in a grid of tiles
+                        like this one. Here's a random tile from a user of the site!</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="outfit_col" class="col-wrapper">
+                <div class="item_desc_col col-lg-6">
+                    <h4>Outfits</h4>
+                    <p>Outfits are organized similar to items. At a glance, you can see a picture of the outfit, the
+                        number of items in the outfit, and how much it's worth.</p>
+                </div>
+                <!--googleoff: all-->
+                <div class="item_col col-lg-6">
+                    {% include 'outfit/tile.html' %}
+                </div>
+                <!--googleon: all-->
+                <div class="clearfix"></div>
+            </div>
+        </div>
     </div>
-    <div class='row marketing'>
-    	<div class="col-wrapper">
-    		<!--googleoff: all-->
-	    	<div lass="item_col col-lg-6">
-				{% include 'item/tile.html' %}
-	    	</div>
-	    	<!--googleon: all-->
-			<div class="item_desc_col col-lg-6">
-				<h4>Clothing</h4>
-				<p>Your clothes are organized visually. You'll be able to view all your clothes in a grid of tiles like this one. Here's a random tile from a user of the site!</p>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-		<div id="outfit_col" class="col-wrapper">
-			<div class="item_desc_col col-lg-6">
-				<h4>Outfits</h4>
-				<p>Outfits are organized similar to items. At a glance, you can see a picture of the outfit, the number of items in the outfit, and how much it's worth.</p>
-			</div>
-			<!--googleoff: all-->
-			<div class="item_col col-lg-6">
-				{% include 'outfit/tile.html' %}
-	    	</div>
-	    	<!--googleon: all-->
-			<div class="clearfix"></div>
-		</div>
-    </div>
-</div>
 {% endblock %}

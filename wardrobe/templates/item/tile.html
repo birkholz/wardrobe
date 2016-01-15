@@ -1,54 +1,58 @@
 {% with item.images.all as images %}
-<div data-cat="{{item.category.name|slugify}}{% if item.category.parent_category %},{{ item.category.parent_category.name|slugify }}{% endif %}" data-id="{{item.id}}" data-company="{{item.company}}" data-color="{{item.colorway}}" data-name="{{item.name}}" data-owned="{{item.owned}}" class="tile {% if not images %}no_image{% endif %}{% if item in outfit.items.all %} selected{% endif %}">
-	{% if item.company %}
-		{% if item.purchase_link %}
-			<a href="{{item.purchase_link}}" target="_blank" class="top_left">
-				{{item.company}}
-			</a>
-		{% else %}
-			<div class="top_left">{{item.company}}</div>
-		{% endif %}
-	{% endif %}
-	{% if item.cost %}
-		<div class="value">
-			{% if request.path != '/' %}
-				{% if puser %}
-				{{puser.prefs.get_currency_symbol|safe}}{{item.cost}}
-				{% else %}
-				{{user.prefs.get_currency_symbol|safe}}{{item.cost}}
-				{% endif %}
-			{% else %}
-			${{item.cost}}
-			{% endif %}
-		</div>
-	{% endif %}
-	{% if user.is_authenticated and user == item.owner and request.path != '/' %}
-		<div class="edit">
-			<a class='glyphicon glyphicon-edit' href="/item/{{item.id}}/edit/"></a>
-			<i data-id="{{item.id}}" class='glyphicon glyphicon-remove'></i>
-		</div>
-	{% endif %}
-	<span class="name">{{item.name}}</span>
-	{% if item.colorway %}
-		<span class="item-color">{{item.colorway}}</span>
-	{% endif %}
-	{% if images %}
-		{% if item.default_image %}
-			<img src="{{item.default_image.image.url}}">
-		{% else %}
-			{% with images|first as image %}
-			<img src="{{image.image.url}}">
-			{% endwith %}
-		{% endif %}
-		<div class="view_pictures_button">
-			<span class="glyphicon glyphicon-picture"></span>
-			{% for image in images %}
-			<a href="{{image.image.url}}" data-lightbox="{{item.id}}"></a>
-			{% endfor %}
-		</div>
-	{% endif %}
-	<div class="overlay">
-		<span>selected</span>
-	</div>
-</div>
+    <div data-cat="
+            {{ item.category.name|slugify }}{% if item.category.parent_category %},{{ item.category.parent_category.name|slugify }}{% endif %}"
+         data-id="{{ item.id }}" data-company="{{ item.company }}" data-color="{{ item.colorway }}"
+         data-name="{{ item.name }}" data-owned="{{ item.owned }}"
+         class="tile {% if not images %}no_image{% endif %}{% if item in outfit.items.all %} selected{% endif %}">
+        {% if item.company %}
+            {% if item.purchase_link %}
+                <a href="{{ item.purchase_link }}" target="_blank" class="top_left">
+                    {{ item.company }}
+                </a>
+            {% else %}
+                <div class="top_left">{{ item.company }}</div>
+            {% endif %}
+        {% endif %}
+        {% if item.cost %}
+            <div class="value">
+                {% if request.path != '/' %}
+                    {% if puser %}
+                        {{ puser.prefs.get_currency_symbol|safe }}{{ item.cost }}
+                    {% else %}
+                        {{ user.prefs.get_currency_symbol|safe }}{{ item.cost }}
+                    {% endif %}
+                {% else %}
+                    ${{ item.cost }}
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated and user == item.owner and request.path != '/' %}
+            <div class="edit">
+                <a class='glyphicon glyphicon-edit' href="/item/{{ item.id }}/edit/"></a>
+                <i data-id="{{ item.id }}" class='glyphicon glyphicon-remove'></i>
+            </div>
+        {% endif %}
+        <span class="name">{{ item.name }}</span>
+        {% if item.colorway %}
+            <span class="item-color">{{ item.colorway }}</span>
+        {% endif %}
+        {% if images %}
+            {% if item.default_image %}
+                <img src="{{ item.default_image.image.url }}">
+            {% else %}
+                {% with images|first as image %}
+                    <img src="{{ image.image.url }}">
+                {% endwith %}
+            {% endif %}
+            <div class="view_pictures_button">
+                <span class="glyphicon glyphicon-picture"></span>
+                {% for image in images %}
+                    <a href="{{ image.image.url }}" data-lightbox="{{ item.id }}"></a>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="overlay">
+            <span>selected</span>
+        </div>
+    </div>
 {% endwith %}

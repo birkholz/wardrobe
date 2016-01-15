@@ -3,59 +3,64 @@
 
 {% block page_name %}Create Outfit{% endblock %}
 
-{% block body_classes %}{{outfit|yesno:'outfit edit,outfit'}}{% endblock %}
+{% block body_classes %}{{ outfit|yesno:'outfit edit,outfit' }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/outfit_create.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/outfit_create.css" %}"/>
 {% endblock %}
 
 {% block content %}
-	{% if first_time %}
-	<div class="alert alert-dismissable alert-info">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		Now you can create outfits! Try making one now. Type a name for the outfit, like "School Uniform" or "Sunday Best", then select clothing for the outfit by clicking on the clothing tiles below. Click <strong>create</strong> when you're done.
-	</div>
-	{% endif %}
-	<div id="server-error" style="display: none;" class="alert alert-danger">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>Server Error:</strong> The site failed to save the outfit. Please try again later.
-	</div>
-	<div id="no-name-error" style="display: none;" class="alert alert-danger">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>Error:</strong> You must provide a name for your outfit.
-	</div>
-	<div id="no-items-error" style="display: none;" class="alert alert-danger">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>Error:</strong> You must select clothes.
-	</div>
-	<div id="one-item-error" style="display: none;" class="alert alert-danger">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<strong>Error:</strong> Outfits need multiple articles of clothing.
-	</div>
-	<div id="outfit-form" role="form">
-		<div class="form-group">
-			<label for="outfit-name">Name:</label>
-			<input type="text" name="outfit-name" id="outfit-name" placeholder="Type a name for your outfit..." {% if outfit %}value="{{outfit.name}}"{% endif %} class="form-control">
-		</div>
-		<div class="form-group">
-			<label for="image-url">Image URL:</label>
-			<input type="text" name="image-url" id="image-url" placeholder="Optional: an image of the outfit" {% if outfit and outfit.image_url %}value="{{outfit.image_url}}"{% endif %} class="form-control">
-		</div>
-		<div id="save-group" class="form-group">
-			<div class="btn btn-success btn-lg" id="save-button">{% if outfit %}Save{% else %}Create{% endif %}</div>
-		</div>
-		<div class="clearfix"></div>
-		<p id="help_text" class="text-center">Click tiles to select them. When you're finished, pick a decent name for the outfit, then click <strong>{% if outfit %}Save{% else %}Create{% endif %}</strong></p>
-	</div>
-	
-	{% include 'includes/filters.html' %}
-	<div id="tile-container">
-		{% for item in items %}
-		{% include 'item/tile.html' %}
-		{% endfor %}
-	</div>
+    {% if first_time %}
+        <div class="alert alert-dismissable alert-info">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Now you can create outfits! Try making one now. Type a name for the outfit, like "School Uniform" or "Sunday
+            Best", then select clothing for the outfit by clicking on the clothing tiles below. Click
+            <strong>create</strong> when you're done.
+        </div>
+    {% endif %}
+    <div id="server-error" style="display: none;" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Server Error:</strong> The site failed to save the outfit. Please try again later.
+    </div>
+    <div id="no-name-error" style="display: none;" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error:</strong> You must provide a name for your outfit.
+    </div>
+    <div id="no-items-error" style="display: none;" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error:</strong> You must select clothes.
+    </div>
+    <div id="one-item-error" style="display: none;" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Error:</strong> Outfits need multiple articles of clothing.
+    </div>
+    <div id="outfit-form" role="form">
+        <div class="form-group">
+            <label for="outfit-name">Name:</label>
+            <input type="text" name="outfit-name" id="outfit-name" placeholder="Type a name for your outfit..."
+                   {% if outfit %}value="{{ outfit.name }}"{% endif %} class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="image-url">Image URL:</label>
+            <input type="text" name="image-url" id="image-url" placeholder="Optional: an image of the outfit"
+                   {% if outfit and outfit.image_url %}value="{{ outfit.image_url }}"{% endif %} class="form-control">
+        </div>
+        <div id="save-group" class="form-group">
+            <div class="btn btn-success btn-lg" id="save-button">{% if outfit %}Save{% else %}Create{% endif %}</div>
+        </div>
+        <div class="clearfix"></div>
+        <p id="help_text" class="text-center">Click tiles to select them. When you're finished, pick a decent name for
+            the outfit, then click <strong>{% if outfit %}Save{% else %}Create{% endif %}</strong></p>
+    </div>
+
+    {% include 'includes/filters.html' %}
+    <div id="tile-container">
+        {% for item in items %}
+            {% include 'item/tile.html' %}
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block extra_js %}
-<script type="text/javascript" src="{% static "js/outfits.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/outfits.js" %}"></script>
 {% endblock %}

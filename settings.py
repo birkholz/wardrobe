@@ -94,3 +94,6 @@ try:
     from local_settings import *
 except ImportError:
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'

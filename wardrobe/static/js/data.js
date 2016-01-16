@@ -1,6 +1,6 @@
 /* =========================================================
  * Bar Chart made by myself for My Outfits
- * http://my-outfits.co
+ * http://myoutfits.co
  * You may use this however you want, it's unlicensed,
  * however, I'd love to see what you do with it!
  * Email me at brandonjbirkholz@gmail.com

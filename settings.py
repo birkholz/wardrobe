@@ -23,11 +23,6 @@ USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 
-
-MEDIA_URL = '/media/'
-
-# STATIC_URL = '/static/'
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -105,4 +100,5 @@ AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
 DEFAULT_FILE_STORAGE = 's3utils.MediaRootS3BotoStorage'
 STATICFILES_STORAGE = 's3utils.StaticRootS3BotoStorage'
 S3_URL = 'http://%s.s3-website-us-east-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = S3_URL
+STATIC_URL = S3_URL + 'static/'
+MEDIA_URL = S3_URL + 'media/'

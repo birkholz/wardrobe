@@ -131,6 +131,11 @@ form .required:before {
 }
 
 .tile .overlay span {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+
     display: block;
     position: absolute;
     top: 50%;

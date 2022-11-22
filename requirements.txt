@@ -8,7 +8,7 @@ pytz==2013d
 django-timezone-field==1.0
 simplejson==3.3.0
 django-uuidfield==0.4.0
-Pillow==3.3.2
+Pillow==9.3.0
 django-impersonate==0.8.0
 django-storages==1.1.8
 boto==2.38.0

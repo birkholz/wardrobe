@@ -116,3 +116,5 @@ docs/_build/
 # PyBuilder
 target/
 
+# Local pyenv file
+.python-version

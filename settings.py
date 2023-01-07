@@ -112,4 +112,3 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 S3_URL = 'http://%s.s3-website-us-east-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = S3_URL + 'static/'
 MEDIA_URL = S3_URL + 'media/'
-STATIC_ROOT = '/static/'

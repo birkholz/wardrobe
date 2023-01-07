@@ -8,9 +8,8 @@ django-social-auth==0.7.27
 django-storages==1.13.2
 django-timezone-field==5.0
 gunicorn==19.5.0
-httplib2==0.8
+httplib2==0.21.0
 jmespath==1.0.1
-oauth2==1.9.0.post1
 Pillow==9.4.0
 psycopg2==2.9.5
 python-dateutil==2.8.2

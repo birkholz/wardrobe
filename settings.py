@@ -1,6 +1,6 @@
 import os
 
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', 'false'))
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', 0))
 TEMPLATE_DEBUG = DEBUG
 
 REGISTER = True

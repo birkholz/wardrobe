@@ -4,14 +4,14 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, \
     HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from forms import ImageUploadForm
-from models import SystemMessage, Outfit, Item, ImageUpload, UserPrefs
+from wardrobe.forms import ImageUploadForm
+from wardrobe.models import SystemMessage, Outfit, Item, ImageUpload, UserPrefs
 
 
 def response_mimetype(request):
@@ -121,11 +121,11 @@ def image_upload(request):
             f = request.FILES.get('image')
             files = [{
                 'url': iu.image.url,
-                'name': unicode(iu.uuid),
+                'name': iu.uuid,
                 "type": "image/png",
                 'thumbnailUrl': iu.image.url,
                 'size': f.size,
-                'deleteUrl': '/image_delete/' + unicode(iu.uuid) + '/',
+                'deleteUrl': '/image_delete/' + iu.uuid + '/',
                 'deleteType': "DELETE",
             }]
             data = {"files": files}

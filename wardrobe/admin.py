@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.db.models import Count
 
-from models import Item, Category, Company, Outfit, SystemMessage, UserPrefs, ImageUpload
+from wardrobe.models import Item, Category, Company, Outfit, SystemMessage, UserPrefs, ImageUpload
 
 
 # class ItemImageInline(admin.TabularInline):
@@ -30,6 +31,7 @@ class ItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
+        exclude = ()
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -84,7 +86,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class OutfitAdmin(admin.ModelAdmin):
     list_display = ('name', 'items_count', 'value')
 
-    def value(self, obj):
+    @staticmethod
+    def value(obj):
         return obj.value()
 
     def items_count(self, obj):

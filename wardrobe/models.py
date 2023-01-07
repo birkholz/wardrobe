@@ -1,58 +1,42 @@
 import datetime
 import os
+import uuid as uuid
 from decimal import Decimal, ROUND_DOWN
-from urlparse import urlparse
+from urllib.parse import urlparse
 
-from boto.s3.bucket import Bucket
-from boto.s3.connection import S3Connection
-from boto.s3.key import Key
-from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.timezone import utc
 from timezone_field import TimeZoneField
-from uuidfield import UUIDField
 
 
 def image_file_name(instance, filename):
     extension = os.path.splitext(filename)[1]
-    file_name = unicode(instance.uuid)
-    return file_name + extension
+    file_name = instance.uuid
+    return f'media/${file_name}${extension}'
 
 
 class ImageUpload(models.Model):
-    uuid = UUIDField(auto=True, primary_key=True)
+    uuid = models.CharField(max_length=32, default=uuid.uuid4, primary_key=True, editable=False)
     image = models.ImageField(upload_to=image_file_name)
-    author = models.ForeignKey(User, related_name='images', null=True, blank=True)
+    author = models.ForeignKey(User, related_name='images', null=True, blank=True, on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True)
-    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey('content_type', 'object_id')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.image.name
 
-    @models.permalink
     def get_absolute_url(self):
         return self.image.url
-
-    def delete(self, *args, **kwargs):
-        if settings.DEBUG:
-            os.remove(self.image.path)
-        else:
-            conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-            b = Bucket(conn, settings.AWS_STORAGE_BUCKET_NAME)
-            k = Key(b)
-            k.key = self.image.url.replace('https://my_outfits.s3.amazonaws.com/', '').split('?')[0]
-            b.delete_key(k)
-        super(ImageUpload, self).delete(*args, **kwargs)
 
 
 class SystemMessage(models.Model):
     message = models.CharField(max_length=500)
-    author = models.ForeignKey(User, related_name='sys_messages')
+    author = models.ForeignKey(User, related_name='sys_messages', null=True, blank=True, on_delete=models.SET_NULL)
     users_read = models.ManyToManyField(User, related_name='read_sys_messages', blank=True)
     date_sent = models.DateField(auto_now_add=True)
     important = models.BooleanField(default=False)
@@ -62,7 +46,7 @@ class SystemMessage(models.Model):
             return True
         return False
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s: %s...' % (self.author.username, self.message[:50])
 
     class Meta:
@@ -86,10 +70,10 @@ class UserPrefs(models.Model):
         ('MM/DD/YYYY', 'MM/DD/YYYY'),
         ('DD/MM/YYYY', 'DD/MM/YYYY'),
     )
-    user = models.OneToOneField(User, primary_key=True, related_name='prefs')
+    user = models.OneToOneField(User, primary_key=True, related_name='prefs', on_delete=models.CASCADE)
     # Profile Settings
     gender = models.CharField(max_length=1, choices=GENDERS, null=True, blank=True)
-    birth_year = models.IntegerField(max_length=4, null=True, blank=True)
+    birth_year = models.IntegerField(null=True, blank=True)
     # Localization Settings
     currency = models.CharField(max_length=3, choices=CURRENCIES, default='USD')
     time_zone = TimeZoneField(null=True, blank=True)
@@ -143,7 +127,7 @@ class UserPrefs(models.Model):
             return True
         return False
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Prefences for user %s' % self.user.username
 
     class Meta:
@@ -153,7 +137,7 @@ class UserPrefs(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    parent_category = models.ForeignKey('self', null=True, blank=True, related_name='subcats')
+    parent_category = models.ForeignKey('self', null=True, blank=True, related_name='subcats', on_delete=models.CASCADE)
 
     def get_count_dict(self, user):
         item_count = self.item_count(user)
@@ -243,7 +227,7 @@ class Category(models.Model):
             item.save()
         self.delete()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -261,7 +245,7 @@ class Company(models.Model):
             item.save()
         self.delete()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -272,19 +256,19 @@ class Company(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=200)
     cost = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    category = models.ForeignKey(Category, related_name="items")
-    company = models.ForeignKey(Company, related_name="items", null=True, blank=True)
+    category = models.ForeignKey(Category, related_name="items", null=True, blank=True, on_delete=models.SET_NULL)
+    company = models.ForeignKey(Company, related_name="items", null=True, blank=True, on_delete=models.SET_NULL)
     purchased_from = models.CharField(max_length=500, null=True, blank=True)
     size = models.CharField(max_length=200, null=True, blank=True)
     colorway = models.CharField(max_length=50, null=True, blank=True)
     notes = models.CharField(max_length=1000, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     purchase_date = models.DateField(null=True, blank=True)
-    owner = models.ForeignKey(User, related_name="items")
+    owner = models.ForeignKey(User, related_name="items", on_delete=models.CASCADE)
     image_url = models.URLField(max_length=500, null=True, blank=True)
     owned = models.BooleanField(default=True)
-    images = generic.GenericRelation(ImageUpload)
-    default_image = models.ForeignKey(ImageUpload, related_name='+', null=True, blank=True)
+    images = GenericRelation(ImageUpload)
+    default_image = models.ForeignKey(ImageUpload, related_name='+', null=True, blank=True, on_delete=models.SET_NULL)
 
     def purchase_link(self):
         if self.purchased_from:
@@ -315,7 +299,7 @@ class Item(models.Model):
         else:
             return 0
 
-    def __unicode__(self):
+    def __str__(self):
         if self.company and self.colorway:
             return '%s - %s in %s' % (self.company.name, self.name, self.colorway)
         elif self.company and not self.colorway:
@@ -336,9 +320,9 @@ class Outfit(models.Model):
     name = models.CharField(max_length=200)
     items = models.ManyToManyField(Item, related_name='outfits')
     notes = models.CharField(max_length=1000, null=True, blank=True)
-    owner = models.ForeignKey(User, related_name="outfits")
+    owner = models.ForeignKey(User, related_name="outfits", on_delete=models.CASCADE)
     image_url = models.URLField(max_length=500, null=True, blank=True)
-    images = generic.GenericRelation(ImageUpload)
+    images = GenericRelation(ImageUpload)
 
     def get_items_count(self):
         return self.items.all().count()
@@ -377,7 +361,7 @@ class Outfit(models.Model):
     def get_absolute_url(self):
         return "/outfit/%s/" % self.id
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -385,10 +369,10 @@ class Outfit(models.Model):
 
 
 class ItemWornDate(models.Model):
-    item = models.ForeignKey(Item, related_name='dates_worn')
+    item = models.ForeignKey(Item, related_name='dates_worn', on_delete=models.CASCADE)
     date = models.DateField()
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s worn on %s' % (self.item, self.date)
 
     class Meta:
@@ -397,7 +381,7 @@ class ItemWornDate(models.Model):
 
 
 class OutfitWornDate(models.Model):
-    outfit = models.ForeignKey(Outfit, related_name='dates_worn')
+    outfit = models.ForeignKey(Outfit, related_name='dates_worn', on_delete=models.CASCADE)
     date = models.DateField()
 
     def save(self, *args, **kwargs):
@@ -405,7 +389,7 @@ class OutfitWornDate(models.Model):
         for item in self.outfit.items.all():
             ItemWornDate.objects.create(item=item, date=self.date)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s worn on %s' % (self.outfit, self.date)
 
     class Meta:

@@ -1,14 +1,15 @@
+import zoneinfo
+
 from django.utils import timezone
 
+class TimezoneMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
 
-class TimezoneMiddleware(object):
-    @staticmethod
-    def process_request(request):
-        tz = request.session.get('django_timezone')
-        if tz:
-            timezone.activate(tz)
+    def __call__(self, request):
+        tzname = request.session.get('django_timezone')
+        if tzname:
+            timezone.activate(zoneinfo.ZoneInfo(tzname))
         else:
-            timezone.activate(timezone.get_default_timezone())
-            if request.user.is_authenticated():
-                if request.user.prefs.time_zone:
-                    timezone.activate(request.user.prefs.time_zone)
+            timezone.deactivate()
+        return self.get_response(request)

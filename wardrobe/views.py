@@ -5,13 +5,13 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, \
     HttpResponseForbidden, Http404
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 
-from forms import ItemForm, UserPrefsForm, ProfileForm
-from models import Item, Category, Outfit, Company, SystemMessage, OutfitWornDate, ItemWornDate, ImageUpload
+from wardrobe.forms import ItemForm, UserPrefsForm, ProfileForm
+from wardrobe.models import Item, Category, Outfit, Company, SystemMessage, OutfitWornDate, ItemWornDate, ImageUpload
 
 
 def index(request):
@@ -46,11 +46,10 @@ def login_view(request):
                            'error': True})
 
     if request.method == "GET":
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('outfits'))
         else:
             next = request.GET.get('next', None)
-            print next
             return render(request, 'sign_in.html',
                           {'next': next, 'register': settings.REGISTER,
                            'error': False})
@@ -86,8 +85,8 @@ def edit_profile(request):
         public_wardrobe = request.POST.get('public_wardrobe', False)
         if public_wardrobe:
             public_wardrobe = True
-        saved_gender = unicode(user.prefs.gender)
-        saved_birth_year = unicode(user.prefs.birth_year)
+        saved_gender = user.prefs.gender
+        saved_birth_year = user.prefs.birth_year
         saved_public_wardrobe = user.prefs.public_wardrobe
         if gender == saved_gender and birth_year == saved_birth_year and saved_public_wardrobe == public_wardrobe:
             pass
@@ -315,7 +314,6 @@ def item_form(request, item_id=None):
                     iu.author = user
                     iu.content_object = item
                     iu.save()
-            print item.images.all()
             items = user.items.count()
             if items == 1:
                 return HttpResponseRedirect(reverse('items') + '?first=true')
@@ -347,7 +345,7 @@ def item_edit(request, item_id):
 def worn(request):
     user = request.user
     if request.method == "GET":
-        if user.is_authenticated():
+        if user.is_authenticated:
             cats = Category.objects.all()
             items = Item.objects.filter(owner=user)
             todays_date = user.prefs.get_today()
@@ -357,7 +355,7 @@ def worn(request):
             return HttpResponseRedirect(reverse('item_create') + '?next=/worn/')
 
     elif request.method == "POST":
-        if user.is_authenticated():
+        if user.is_authenticated:
             try:
                 date = request.POST['date']
             except:

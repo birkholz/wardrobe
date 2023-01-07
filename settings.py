@@ -1,4 +1,3 @@
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 import os
 
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', ''))
@@ -15,6 +14,10 @@ MANAGERS = ADMINS
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['myoutfits.co',]
+if DEBUG:
+    ALLOWED_HOSTS += ['127.0.0.1']
+
+
 TIME_ZONE = 'America/Los_Angeles'
 LANGUAGE_CODE = 'en-us'
 
@@ -33,10 +36,9 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'wardrobe.tz_middleware.TimezoneMiddleware',
@@ -47,7 +49,6 @@ ROOT_URLCONF = 'wardrobe.urls'
 WSGI_APPLICATION = 'wardrobe.wsgi.application'
 
 
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,12 +57,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'south',
     'pytz',
     # 'social_auth',
     'timezone_field',
     'simplejson',
-    'uuidfield',
     'wardrobe',
     'impersonate',
     'storages',
@@ -76,9 +75,20 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages'
+            ]
+        }
+    }
+]
 
 CACHES = {
     'default': {
@@ -92,13 +102,13 @@ except ImportError:
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
     import dj_database_url
     DATABASES = {'default': dj_database_url.config()}
-    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
 
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-DEFAULT_FILE_STORAGE = 's3utils.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 's3utils.StaticRootS3BotoStorage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 S3_URL = 'http://%s.s3-website-us-east-1.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = S3_URL + 'static/'
 MEDIA_URL = S3_URL + 'media/'

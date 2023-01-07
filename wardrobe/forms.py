@@ -1,7 +1,8 @@
 from django import forms
-from models import Item, UserPrefs, ImageUpload
 from timezone_field import TimeZoneFormField
 from random import choice
+
+from wardrobe.models import UserPrefs, ImageUpload, Item
 
 item_names = ['Tweed Blazer', 'V-Neck Tee', 'Club Shorts', 'Wingtoe Dress Shoes', 'Wool Peacoat']
 company_names = ['Uniqlo', 'American Eagle', 'Forever 21', 'GAP', 'Old Navy']

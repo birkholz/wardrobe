@@ -11,7 +11,7 @@ httplib2==0.8
 oauth2==1.9.0.post1
 Pillow==9.4.0
 python-openid==2.2.5
-pytz===2013d
+pytz==2022.7
 s3utils==0.5.3
 simplejson==3.3.0
 sorl-thumbnail==12.3

@@ -349,7 +349,7 @@ class Outfit(models.Model):
     def get_latest_date_worn(self):
         objs = self.get_dates_worn()
         if objs:
-            return objs[0].replace(tzinfo=None)
+            return objs[0]
         return None
 
     def value(self):

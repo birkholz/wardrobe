@@ -2,7 +2,7 @@ asgiref==3.6.0
 boto3==1.26.45
 botocore==1.29.45
 dj-database-url==1.2.0
-Django==4.1.5
+Django==4.1.7
 django-impersonate==1.8.2
 django-social-auth==0.7.27
 django-storages==1.13.2
